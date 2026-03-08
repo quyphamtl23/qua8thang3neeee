@@ -21,6 +21,8 @@ canvas{
 position:fixed;
 top:0;
 left:0;
+width:100vw;
+height:100vh;
 }
 
 .world{
@@ -36,6 +38,7 @@ transform-origin:0 0;
 position:absolute;
 top:1200px;
 left:1200px;
+margin-left:-300px;
 font-size:32px;
 text-align:center;
 text-shadow:0 0 20px white;
@@ -136,18 +139,17 @@ changeText()
 
 /* STAR BACKGROUND */
 
-const canvas=document.getElementById("stars")
-const ctx=canvas.getContext("2d")
-
-function resize(){
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
-}
-resize()
-
-window.addEventListener("resize",resize)
+const canvas = document.getElementById("stars")
+const ctx = canvas.getContext("2d")
 
 let stars=[]
+
+function initStars(){
+
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+
+stars=[]
 
 for(let i=0;i<300;i++){
 stars.push({
@@ -156,6 +158,12 @@ y:Math.random()*canvas.height,
 size:Math.random()*2
 })
 }
+
+}
+
+initStars()
+
+window.addEventListener("resize", initStars)
 
 function draw(){
 
@@ -301,5 +309,6 @@ updateCamera()
 
 </body>
 </html>
+
 
 
