@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -15,7 +16,7 @@ overflow:hidden;
 background:black;
 font-family:sans-serif;
 color:white;
-height:100dvh;
+min-height:100vh;
 }
 
 canvas{
@@ -117,11 +118,9 @@ padding:12px 20px;
 <button id="start">Ấn vào đây đi nè lovers❤️</button>
 
 <div id="main" style="display:none">
-
 <div class="world" id="world">
 <div class="center" id="text"></div>
 </div>
-
 </div>
 
 <audio id="music" loop>
@@ -165,13 +164,20 @@ const ctx=canvas.getContext("2d")
 
 let stars=[]
 
+function getHeight(){
+return document.documentElement.clientHeight
+}
+
+function resizeCanvas(){
+
+canvas.width=window.innerWidth
+canvas.height=getHeight()
+
+}
+
 function initStars(){
 
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
-
-canvas.style.width = window.innerWidth + "px"
-canvas.style.height = window.innerHeight + "px"
+resizeCanvas()
 
 stars=[]
 
@@ -186,13 +192,9 @@ size:Math.random()*2
 }
 
 initStars()
+
 window.addEventListener("resize",()=>{
-
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
-
 initStars()
-
 })
 
 function draw(){
@@ -280,12 +282,12 @@ world.appendChild(div)
 
 let zoom=1
 let posX=(window.innerWidth-2500)/2
-let posY=(window.innerHeight-2500)/2
+let posY=(getHeight()-2500)/2
 
 function updateCamera(){
 
 let minX=window.innerWidth-2500*zoom
-let minY=window.innerHeight-2500*zoom
+let minY=getHeight()-2500*zoom
 
 if(posX>0)posX=0
 if(posY>0)posY=0
@@ -299,7 +301,7 @@ world.style.transform=
 
 updateCamera()
 
-/* ZOOM DESKTOP */
+/* ZOOM */
 
 document.addEventListener("wheel",(e)=>{
 
@@ -312,7 +314,7 @@ updateCamera()
 
 })
 
-/* DRAG DESKTOP */
+/* DRAG */
 
 let dragging=false
 let startX,startY
@@ -341,7 +343,7 @@ updateCamera()
 
 })
 
-/* TOUCH DRAG MOBILE */
+/* TOUCH DRAG */
 
 document.addEventListener("touchstart",(e)=>{
 dragging=true
@@ -369,7 +371,7 @@ updateCamera()
 
 })
 
-/* PINCH ZOOM MOBILE */
+/* PINCH ZOOM */
 
 let lastDist=null
 
@@ -406,6 +408,4 @@ lastDist=null
 
 </body>
 </html>
-
-
-
+```
