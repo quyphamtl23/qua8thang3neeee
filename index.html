@@ -1,0 +1,338 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Galaxy Love</title>
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+background:black;
+font-family:sans-serif;
+color:white;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+}
+
+.center{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:32px;
+text-align:center;
+text-shadow:0 0 20px white;
+z-index:5;
+max-width:70vw;
+pointer-events:none;
+}
+
+.world{
+position:absolute;
+top:0;
+left:0;
+width:2500px;
+height:2500px;
+transform-origin:0 0;
+}
+
+.photo{
+position:absolute;
+width:150px;
+height:100px;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 0 20px rgba(255,255,255,0.8);
+transition:0.3s;
+}
+
+.photo:hover{
+transform:scale(1.2);
+box-shadow:0 0 30px pink;
+}
+
+.photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+button{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+padding:15px 30px;
+font-size:20px;
+border:none;
+background:#ff4d88;
+color:white;
+border-radius:12px;
+cursor:pointer;
+z-index:10;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<button id="start">Nhấn vô đi nè tình yêu ❤️</button>
+
+<div id="main" style="display:none">
+
+<div class="center" id="text"></div>
+
+<div class="world" id="world"></div>
+
+</div>
+
+<audio id="music" loop>
+<source src="music.mp3">
+</audio>
+
+<script>
+
+/* TEXT */
+
+const texts=[
+"Chúc các cô gái luôn vui vẻ🎉🎉",
+"8/3 thật hạnh phúc nha❤️❤️❤️",
+"Mong rằng chúng mình sẽ có nhiều kỷ niệm đẹp🫶",
+"Và sống cho thật tốt nheeee😆"
+]
+
+let ti=0
+
+function changeText(){
+document.getElementById("text").innerText=texts[ti]
+ti++
+if(ti>=texts.length)ti=0
+}
+
+setInterval(changeText,4000)
+
+/* START */
+
+document.getElementById("start").onclick=()=>{
+document.getElementById("start").style.display="none"
+document.getElementById("main").style.display="block"
+document.getElementById("music").play()
+changeText()
+}
+
+/* STAR BACKGROUND */
+
+const canvas=document.getElementById("stars")
+const ctx=canvas.getContext("2d")
+
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+let stars=[]
+
+for(let i=0;i<300;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+size:Math.random()*2
+})
+}
+
+function draw(){
+
+ctx.fillStyle="black"
+ctx.fillRect(0,0,canvas.width,canvas.height)
+
+ctx.fillStyle="white"
+
+stars.forEach(s=>{
+
+ctx.beginPath()
+ctx.arc(s.x,s.y,s.size,0,Math.PI*2)
+ctx.fill()
+
+s.y+=0.4
+
+if(s.y>canvas.height){
+s.y=0
+s.x=Math.random()*canvas.width
+}
+
+})
+
+requestAnimationFrame(draw)
+
+}
+
+draw()
+
+/* IMAGES */
+
+const images=[
+"images/1.jpg",
+"images/2.jpg",
+"images/3.jpg",
+"images/4.jpg",
+"images/5.jpg",
+"images/6.jpg",
+"images/7.jpg",
+"images/8.jpg",
+"images/9.jpg",
+"images/10.jpg",
+"images/11.jpg",
+"images/12.jpg",
+"images/13.jpg",
+"images/14.jpg",
+"images/15.jpg",
+"images/16.jpg",
+"images/17.jpg",
+"images/18.jpg",
+"images/19.jpg",
+"images/20.jpg",
+"images/21.jpg",
+"images/22.jpg",
+"images/23.jpg",
+"images/24.jpg",
+"images/25.jpg",
+"images/26.jpg",
+"images/27.jpg",
+"images/28.jpg"
+]
+
+const world=document.getElementById("world")
+
+const total=71
+
+let placed=[]
+
+for(let i=0;i<total;i++){
+
+let x,y,ok
+
+do{
+
+x=Math.random()*2300
+y=Math.random()*2300
+ok=true
+
+placed.forEach(p=>{
+let dx=p.x-x
+let dy=p.y-y
+let dist=Math.sqrt(dx*dx+dy*dy)
+
+if(dist<180) ok=false
+})
+
+}while(!ok)
+
+placed.push({x,y})
+
+let div=document.createElement("div")
+div.className="photo"
+
+div.style.left=x+"px"
+div.style.top=y+"px"
+
+let img=document.createElement("img")
+img.src=images[i%images.length]
+
+div.appendChild(img)
+
+world.appendChild(div)
+
+}
+
+/* CAMERA */
+
+let zoom=1
+let posX=0
+let posY=0
+
+function updateCamera(){
+world.style.transform=
+`translate(${posX}px,${posY}px) scale(${zoom})`
+}
+
+/* ZOOM */
+
+document.addEventListener("wheel",(e)=>{
+
+zoom+=e.deltaY*-0.001
+
+if(zoom<0.4)zoom=0.4
+if(zoom>3)zoom=3
+
+updateCamera()
+
+})
+
+/* DRAG */
+
+let dragging=false
+let startX,startY
+
+document.addEventListener("mousedown",(e)=>{
+dragging=true
+startX=e.clientX
+startY=e.clientY
+})
+
+document.addEventListener("mouseup",()=>{
+dragging=false
+})
+
+document.addEventListener("mousemove",(e)=>{
+
+if(!dragging)return
+
+posX+=e.clientX-startX
+posY+=e.clientY-startY
+
+startX=e.clientX
+startY=e.clientY
+
+updateCamera()
+
+})
+
+/* TOUCH DRAG */
+
+document.addEventListener("touchstart",(e)=>{
+
+startX=e.touches[0].clientX
+startY=e.touches[0].clientY
+
+})
+
+document.addEventListener("touchmove",(e)=>{
+
+posX+=e.touches[0].clientX-startX
+posY+=e.touches[0].clientY-startY
+
+startX=e.touches[0].clientX
+startY=e.touches[0].clientY
+
+updateCamera()
+
+})
+
+updateCamera()
+
+</script>
+
+</body>
+</html>
+```
