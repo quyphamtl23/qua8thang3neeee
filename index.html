@@ -39,14 +39,16 @@ transform-origin:0 0;
 .center{
 position:absolute;
 top:1200px;
-left:1200px;
-margin-left:-300px;
+left:50%;
+transform:translateX(-50%);
 font-size:32px;
 text-align:center;
 text-shadow:0 0 20px white;
 max-width:600px;
 pointer-events:none;
 z-index:10;
+padding:0 20px;
+box-sizing:border-box;
 }
 
 .photo{
@@ -275,8 +277,8 @@ world.appendChild(div)
 /* CAMERA */
 
 let zoom=1
-let posX=window.innerWidth/2-1200
-let posY=window.innerHeight/2-1200
+let posX=(window.innerWidth-2500)/2
+let posY=(window.innerHeight-2500)/2
 
 function updateCamera(){
 world.style.transform=
@@ -323,7 +325,21 @@ posY+=e.clientY-startY
 startX=e.clientX
 startY=e.clientY
 
-updateCamera()
+function updateCamera(){
+
+let minX = window.innerWidth - 2500*zoom
+let minY = window.innerHeight - 2500*zoom
+
+if(posX>0)posX=0
+if(posY>0)posY=0
+if(posX<minX)posX=minX
+if(posY<minY)posY=minY
+
+world.style.transform=
+`translate(${posX}px,${posY}px) scale(${zoom})`
+
+}
+)
 
 })
 
@@ -391,3 +407,4 @@ lastDist=null
 </body>
 </html>
 ```
+
