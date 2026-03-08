@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -85,7 +86,7 @@ cursor:pointer;
 z-index:10;
 }
 
-  @media (max-width:600px){
+@media (max-width:600px){
 
 .photo{
 width:95px;
@@ -105,33 +106,6 @@ padding:12px 20px;
 
 }
 
-  /* TOUCH DRAG (MOBILE) */
-
-document.addEventListener("touchstart",(e)=>{
-
-dragging=true
-startX=e.touches[0].clientX
-startY=e.touches[0].clientY
-
-})
-
-document.addEventListener("touchend",()=>{
-dragging=false
-})
-
-document.addEventListener("touchmove",(e)=>{
-
-if(!dragging)return
-
-posX+=e.touches[0].clientX-startX
-posY+=e.touches[0].clientY-startY
-
-startX=e.touches[0].clientX
-startY=e.touches[0].clientY
-
-updateCamera()
-
-})
 </style>
 </head>
 
@@ -311,7 +285,7 @@ world.style.transform=
 
 updateCamera()
 
-/* ZOOM */
+/* ZOOM DESKTOP */
 
 document.addEventListener("wheel",(e)=>{
 
@@ -324,7 +298,7 @@ updateCamera()
 
 })
 
-/* DRAG */
+/* DRAG DESKTOP */
 
 let dragging=false
 let startX,startY
@@ -353,7 +327,35 @@ updateCamera()
 
 })
 
-  /* PINCH ZOOM MOBILE */
+/* TOUCH DRAG MOBILE */
+
+document.addEventListener("touchstart",(e)=>{
+dragging=true
+startX=e.touches[0].clientX
+startY=e.touches[0].clientY
+})
+
+document.addEventListener("touchend",()=>{
+dragging=false
+})
+
+document.addEventListener("touchmove",(e)=>{
+
+if(e.touches.length==1 && dragging){
+
+posX+=e.touches[0].clientX-startX
+posY+=e.touches[0].clientY-startY
+
+startX=e.touches[0].clientX
+startY=e.touches[0].clientY
+
+updateCamera()
+
+}
+
+})
+
+/* PINCH ZOOM MOBILE */
 
 let lastDist=null
 
@@ -383,12 +385,9 @@ lastDist=dist
 document.addEventListener("touchend",()=>{
 lastDist=null
 })
-  
+
 </script>
 
 </body>
 </html>
-
-
-
-
+```
