@@ -98,7 +98,6 @@ height:70px;
 .center{
 font-size:20px;
 max-width:260px;
-margin-left:-130px;
 }
 
 button{
@@ -120,9 +119,7 @@ padding:12px 20px;
 <div id="main" style="display:none">
 
 <div class="world" id="world">
-
 <div class="center" id="text"></div>
-
 </div>
 
 </div>
@@ -163,15 +160,15 @@ changeText()
 
 /* STAR BACKGROUND */
 
-const canvas = document.getElementById("stars")
-const ctx = canvas.getContext("2d")
+const canvas=document.getElementById("stars")
+const ctx=canvas.getContext("2d")
 
 let stars=[]
 
 function initStars(){
 
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
 
 stars=[]
 
@@ -186,8 +183,7 @@ size:Math.random()*2
 }
 
 initStars()
-
-window.addEventListener("resize", initStars)
+window.addEventListener("resize",initStars)
 
 function draw(){
 
@@ -227,7 +223,6 @@ const images=[
 ]
 
 const world=document.getElementById("world")
-
 const total=100
 
 let placed=[]
@@ -246,7 +241,6 @@ placed.forEach(p=>{
 let dx=p.x-x
 let dy=p.y-y
 let dist=Math.sqrt(dx*dx+dy*dy)
-
 if(dist<180) ok=false
 })
 
@@ -261,7 +255,6 @@ div.style.left=x+"px"
 div.style.top=y+"px"
 
 let img=document.createElement("img")
-
 img.src=images[i%images.length]
 
 img.onerror=()=>{
@@ -269,7 +262,6 @@ img.src="https://picsum.photos/300/200"
 }
 
 div.appendChild(img)
-
 world.appendChild(div)
 
 }
@@ -281,8 +273,18 @@ let posX=(window.innerWidth-2500)/2
 let posY=(window.innerHeight-2500)/2
 
 function updateCamera(){
+
+let minX=window.innerWidth-2500*zoom
+let minY=window.innerHeight-2500*zoom
+
+if(posX>0)posX=0
+if(posY>0)posY=0
+if(posX<minX)posX=minX
+if(posY<minY)posY=minY
+
 world.style.transform=
 `translate(${posX}px,${posY}px) scale(${zoom})`
+
 }
 
 updateCamera()
@@ -325,21 +327,7 @@ posY+=e.clientY-startY
 startX=e.clientX
 startY=e.clientY
 
-function updateCamera(){
-
-let minX = window.innerWidth - 2500*zoom
-let minY = window.innerHeight - 2500*zoom
-
-if(posX>0)posX=0
-if(posY>0)posY=0
-if(posX<minX)posX=minX
-if(posY<minY)posY=minY
-
-world.style.transform=
-`translate(${posX}px,${posY}px) scale(${zoom})`
-
-}
-)
+updateCamera()
 
 })
 
@@ -357,7 +345,7 @@ dragging=false
 
 document.addEventListener("touchmove",(e)=>{
 
-if(e.touches.length==1 && dragging){
+if(e.touches.length===1 && dragging){
 
 posX+=e.touches[0].clientX-startX
 posY+=e.touches[0].clientY-startY
@@ -384,12 +372,14 @@ let dy=e.touches[0].clientY-e.touches[1].clientY
 let dist=Math.sqrt(dx*dx+dy*dy)
 
 if(lastDist){
+
 zoom+=(dist-lastDist)*0.005
 
 if(zoom<0.4)zoom=0.4
 if(zoom>3)zoom=3
 
 updateCamera()
+
 }
 
 lastDist=dist
@@ -407,4 +397,3 @@ lastDist=null
 </body>
 </html>
 ```
-
